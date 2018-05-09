@@ -1,35 +1,51 @@
 package com.example.ryota.remotesystemstempfiles;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import java.util.List;
 
-public class VideoListAdapter extends RecyclerView.Adapter<VideoListHolder> {
-    private List<VideoRowData> videoRowDataList;
+class VideoListAdapter extends RecyclerView.Adapter<VideoListHolder> {
+    private final Context context;
+    private final List<VideoRowData> videoRowDataList;
+    private final RowClickListener rowClickListener;
+    private View.OnClickListener listener;
 
-    public VideoListAdapter(List<VideoRowData> list){
+
+    VideoListAdapter(Context context, List<VideoRowData> list, RowClickListener listener) {
+        super();
+        this.context = context;
         this.videoRowDataList = list;
+        this.rowClickListener = listener;
     }
 
     @NonNull
     @Override
     public VideoListHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflate = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_data,parent,false);
-        VideoListHolder videoListHolder = new VideoListHolder(inflate);
-        return videoListHolder;
+        return new VideoListHolder(inflate);
     }
 
     @Override
     public void onBindViewHolder(@NonNull VideoListHolder holder, int position) {
-        holder.videoNameTextView.setText(videoRowDataList.get(position).getVideoName());
+        final VideoRowData rowData = videoRowDataList.get(position);
+        holder.videoNameTextView.setText(rowData.getVideoName());
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VideoListAdapter.this.rowClickListener.rowClicked(rowData);
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
-        return videoRowDataList.size();
+        return this.videoRowDataList.size();
     }
 }

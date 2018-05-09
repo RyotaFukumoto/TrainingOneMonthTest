@@ -1,6 +1,6 @@
 package com.example.ryota.remotesystemstempfiles;
 
-public class VideoRowData {
+class VideoRowData {
     public String getVideoName() {
         return this.videoName;
     }
